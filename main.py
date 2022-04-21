@@ -7,7 +7,7 @@ import pandas as pd
 
 if __name__ == "__main__":
     # Getting the data from the csv file
-    df = pd.read_csv("pokedex.csv")
+    df = pd.read_csv("pokedexCopy.csv")
 
     # Getting max values for all numerical attributes
     total_max = df['TOTAL'].max()
