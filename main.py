@@ -10,25 +10,31 @@ DISCRETIZATION_FACTOR = 5
 
 
 def discretizeData(df):
-    totalFactor = math.ceil(max(df['TOTAL'])/ (DISCRETIZATION_FACTOR + 1))
-    HPFactor = math.ceil(255/ (DISCRETIZATION_FACTOR + 1))
-    attackFactor = math.ceil(max(df['ATTACK'])/ (DISCRETIZATION_FACTOR + 1))
-    defenseFactor = math.ceil(max(df['DEFENSE']) / (DISCRETIZATION_FACTOR + 1))
-    spattackFactor = math.ceil(max(df['SPECIAL ATTACK']) / (DISCRETIZATION_FACTOR + 1))
-    spdefenseFactor = math.ceil(max(df['SPECIAL DEFENSE']) / (DISCRETIZATION_FACTOR + 1))
-    speedFactor = math.ceil(max(df['SPEED']) / (DISCRETIZATION_FACTOR + 1))
-    df['TOTAL'] = df['TOTAL'] // totalFactor
-    df['HP'] = df['HP'] // HPFactor
-    df['ATTACK'] = df['ATTACK'] // attackFactor
-    df['DEFENSE'] = df['DEFENSE'] // defenseFactor
-    df['SPECIAL ATTACK'] = df['SPECIAL ATTACK'] // spattackFactor
-    df['SPECIAL DEFENSE'] = df['SPECIAL DEFENSE'] // spdefenseFactor
-    df['SPEED'] = df['SPEED'] // speedFactor
+    totalFactor = math.ceil(max(df['TOTAL']) / (DISCRETIZATION_FACTOR))
+    HPFactor = math.ceil(255/ (DISCRETIZATION_FACTOR))
+    attackFactor = math.ceil(max(df['ATTACK']) / (DISCRETIZATION_FACTOR))
+    defenseFactor = math.ceil(max(df['DEFENSE']) / (DISCRETIZATION_FACTOR))
+    spattackFactor = math.ceil(max(df['SPECIAL ATTACK']) / (DISCRETIZATION_FACTOR))
+    spdefenseFactor = math.ceil(max(df['SPECIAL DEFENSE']) / (DISCRETIZATION_FACTOR))
+    speedFactor = math.ceil(max(df['SPEED']) / (DISCRETIZATION_FACTOR))
+    print(spattackFactor)
+    df['TOTAL'] = df['TOTAL'] // totalFactor + 1
+    df['HP'] = df['HP'] // HPFactor + 1
+    df['ATTACK'] = df['ATTACK'] // attackFactor + 1
+    df['DEFENSE'] = df['DEFENSE'] // defenseFactor + 1
+    df['SPECIAL ATTACK'] = df['SPECIAL ATTACK'] // spattackFactor + 1
+    df['SPECIAL DEFENSE'] = df['SPECIAL DEFENSE'] // spdefenseFactor + 1
+    df['SPEED'] = df['SPEED'] // speedFactor + 1
 
     return df
 
 def cleanVariants(df):
     df['NAME'] = np.where(df['VARIANT (IF ANY)'] == 'None', df['NAME'], df['NAME'] + ' (' + df['VARIANT (IF ANY)'] + ')')
+    return df
+
+def mergeTypes(df):
+    df['TYPE 1'] = np.where(df['TYPE 2 (IF ANY)'] == 'no second type', df['TYPE 1'],
+                          df['TYPE 1'] + '-' + df['TYPE 2 (IF ANY)'])
     return df
 
 
@@ -38,6 +44,7 @@ if __name__ == "__main__":
 
     df = discretizeData(df)
     df = cleanVariants(df)
+    df = mergeTypes(df)
     print(df)
 
     # Create an empty list
@@ -58,7 +65,7 @@ if __name__ == "__main__":
     print(data)
 
     # parameters for the lloyd's function
-    columns = [3, 4, 11]
+    columns = [3, 11]
 
     data = [{row[c] for c in columns} for row in data]
     print("\nNew data with only the relevant columns...")
