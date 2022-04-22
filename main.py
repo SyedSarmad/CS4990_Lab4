@@ -4,10 +4,26 @@ import math
 import numpy as np
 import pandas as pd
 
+DISCRETIZATION_FACTOR = 5
+
 
 def discretizeData(df):
+    totalFactor = math.ceil(max(df['TOTAL'])/ (DISCRETIZATION_FACTOR + 1))
+    HPFactor = math.ceil(255/ (DISCRETIZATION_FACTOR + 1))
+    attackFactor = math.ceil(max(df['ATTACK'])/ (DISCRETIZATION_FACTOR + 1))
+    defenseFactor = math.ceil(max(df['DEFENSE']) / (DISCRETIZATION_FACTOR + 1))
+    spattackFactor = math.ceil(max(df['SPECIAL ATTACK']) / (DISCRETIZATION_FACTOR + 1))
+    spdefenseFactor = math.ceil(max(df['SPECIAL DEFENSE']) / (DISCRETIZATION_FACTOR + 1))
+    speedFactor = math.ceil(max(df['SPEED']) / (DISCRETIZATION_FACTOR + 1))
+    df['TOTAL'] = df['TOTAL'] // totalFactor
+    df['HP'] = df['HP'] // HPFactor
+    df['ATTACK'] = df['ATTACK'] // attackFactor
+    df['DEFENSE'] = df['DEFENSE'] // defenseFactor
+    df['SPECIAL ATTACK'] = df['SPECIAL ATTACK'] // spattackFactor
+    df['SPECIAL DEFENSE'] = df['SPECIAL DEFENSE'] // spdefenseFactor
+    df['SPEED'] = df['SPEED'] // speedFactor
 
-    pass
+    return df
 
 def cleanVariants(df):
     df['NAME'] = np.where(df['VARIANT (IF ANY)'] == 'None', df['NAME'], df['NAME'] + ' (' + df['VARIANT (IF ANY)'] + ')')
@@ -18,7 +34,9 @@ if __name__ == "__main__":
     # Getting the data from the csv file
     df = pd.read_csv("pokedexCopy.csv")
 
+    df = discretizeData(df)
     df = cleanVariants(df)
+    print(df)
 
     # Create an empty list
     data = []
