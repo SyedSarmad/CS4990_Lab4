@@ -65,4 +65,4 @@ if __name__ == "__main__":
     print(data)
 
 
-    apriori(data, 15/len(data))
+    apriori(data, 30/len(data))

@@ -7,16 +7,23 @@ def apriori(itemsets, threshold):
     # Should return a list of pairs, where each pair consists of the frequent itemset and its support 
     # e.g. [(set(items), 0.7), (set(otheritems), 0.74), ...]
 
+    kitemsets = []
     for item in itemsets:
-        print("ITEM: ", end=" ")
-        print(item, end="")
+        # print("ITEM: ", end=" ")
+        # print(item, end="")
         occurrences = itemsets.count(item)
-        print(" COUNT: ", end=" ")
-        print(occurrences)
-
-        #if(occurrences/len(itemsets) >= threshold):
-            #add it into the new itemset
-           # print()
+        # print(" COUNT: ", end=" ")
+        # print(occurrences)
+        if occurrences / len(itemsets) >= threshold:
+            print("ITEM: ", end=" ")
+            print(item, end="")
+            print(" COUNT: ", end=" ")
+            print(occurrences)
+            kitemsets.append(item)
+    print(kitemsets)
+    # removing the duplicates
+    remove_dup(kitemsets)
+    print(kitemsets)
 
     return []
 
@@ -32,3 +39,13 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     return []
 
 
+def remove_dup(a):
+   i = 0
+   while i < len(a):
+      j = i + 1
+      while j < len(a):
+         if a[i] == a[j]:
+            del a[j]
+         else:
+            j += 1
+      i += 1
