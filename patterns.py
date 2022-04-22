@@ -6,6 +6,18 @@ def apriori(itemsets, threshold):
     
     # Should return a list of pairs, where each pair consists of the frequent itemset and its support 
     # e.g. [(set(items), 0.7), (set(otheritems), 0.74), ...]
+
+    for item in itemsets:
+        print("ITEM: ", end=" ")
+        print(item, end="")
+        occurrences = itemsets.count(item)
+        print(" COUNT: ", end=" ")
+        print(occurrences)
+
+        #if(occurrences/len(itemsets) >= threshold):
+            #add it into the new itemset
+           # print()
+
     return []
 
     
@@ -18,3 +30,5 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     # Rules should only be included if m is greater than the given threshold.    
     # e.g. [(set(condition),set(effect),0.45), ...]
     return []
+
+

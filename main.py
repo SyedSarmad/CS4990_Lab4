@@ -4,6 +4,8 @@ import math
 import numpy as np
 import pandas as pd
 
+from patterns import apriori
+
 DISCRETIZATION_FACTOR = 5
 
 
@@ -59,7 +61,8 @@ if __name__ == "__main__":
     columns = [3, 4, 11]
 
     data = [{row[c] for c in columns} for row in data]
-
     print("\nNew data with only the relevant columns...")
     print(data)
 
+
+    apriori(data, 15/len(data))
