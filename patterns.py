@@ -9,6 +9,8 @@ def apriori(itemsets, threshold):
     # Should return a list of pairs, where each pair consists of the frequent itemset and its support 
     # e.g. [(set(items), 0.7), (set(otheritems), 0.74), ...]
 
+    print(itemsets)
+
     # We compare everything to itemsets
     kitemsets = []
     elements = []
@@ -34,7 +36,7 @@ def apriori(itemsets, threshold):
     # return []
     while True:
         tempk = list()
-        print('Lenght of kitemsets is:', len(kitemsets[0][0]))
+        print('Length of kitemsets is:', len(kitemsets[0][0]))
         for i in range(len(kitemsets)):
 
             for j in range(len(kitemsets[0][0]), len(elements)):
@@ -84,6 +86,28 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     # Each entry (c,e,m) represents a rule c => e, with the matric value m
     # Rules should only be included if m is greater than the given threshold.    
     # e.g. [(set(condition),set(effect),0.45), ...]
+
+    #support is given, which is p(t)
+    if metric == "lift":
+        # lift = A=>B = P(T) / (P(A) * P(B) = P(B|A) / P(B) = CONF(A=>B) / SUPP(B)
+        pass
+    elif metric == 'all':
+        # all_conf(A=>B) = MIN(P(A|B), P(B|A)
+        pass
+    elif metric == 'max':
+        # MAX_conf(A=>B) = MAX(P(A|B), P(B|A)
+        pass
+    elif metric == 'kulczynski':
+        # KULC(A=>B) = (P(A|B) + P(B|A)) / 2
+        pass
+    elif metric == 'cosine':
+        # COS(A=>B) = SQRT(P(A|B) * P(B|A))
+        pass
+
+    print("TEST")
+    print(frequent_itemsets[0])
+
+
     return []
 
 
@@ -97,3 +121,8 @@ def remove_dup(a):
          else:
             j += 1
       i += 1
+
+def powerset(s):
+    x = len(s)
+    for i in range(1 << x):
+        print([s[j] for j in range(x) if (i & (1 << j))])

@@ -40,11 +40,11 @@ def mergeTypes(df):
 
 if __name__ == "__main__":
     # Getting the data from the csv file
-    df = pd.read_csv("pokedexCopy.csv")
+    df = pd.read_csv("dota2.csv")
 
-    df = discretizeData(df)
-    df = cleanVariants(df)
-    df = mergeTypes(df)
+    #df = discretizeData(df)
+    #df = cleanVariants(df)
+    #df = mergeTypes(df)
     print(df)
 
     # Create an empty list
@@ -53,9 +53,9 @@ if __name__ == "__main__":
     # Iterate over each row
     for index, rows in df.iterrows():
         # Create list for the current row
-        my_list = [rows['ID'], rows['NAME'], rows['VARIANT (IF ANY)'], rows['TYPE 1'], rows['TYPE 2 (IF ANY)'],
-                   rows['TOTAL'], rows['HP'], rows['ATTACK'], rows['DEFENSE'],
-                   rows['SPECIAL ATTACK'], rows['SPECIAL DEFENSE'], rows['SPEED']]
+        my_list = [rows['match_id'], rows['radiant_hero1'], rows['radiant_hero2'], rows['radiant_hero3'], rows['radiant_hero4'],
+                   rows['radiant_hero5'], rows['dire_hero1'], rows['dire_hero2'], rows['dire_hero3'],
+                   rows['dire_hero4'], rows['dire_hero5']]
 
         # append the list to the final list
         data.append(my_list)
@@ -65,11 +65,11 @@ if __name__ == "__main__":
     print(data)
 
     # parameters for the lloyd's function
-    columns = [3, 11]
+    #columns = [3, 11]
 
-    data = [{row[c] for c in columns} for row in data]
-    print("\nNew data with only the relevant columns...")
-    print(data)
+    #data = [{row[c] for c in columns} for row in data]
+    #print("\nNew data with only the relevant columns...")
+    #print(data)
 
 
-    apriori(data, 50/len(data))
+    apriori(data, 15/len(data))
