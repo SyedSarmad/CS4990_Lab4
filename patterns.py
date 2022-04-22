@@ -1,4 +1,5 @@
 import math
+import copy
 
 # DO NOT CHANGE THE FOLLOWING LINE
 def apriori(itemsets, threshold):
@@ -24,6 +25,32 @@ def apriori(itemsets, threshold):
     # removing the duplicates
     remove_dup(kitemsets)
     print(kitemsets)
+    two_itemset = []
+    for i in range(len(kitemsets)):
+        temp_list = []
+        temp_list.append(kitemsets[i])
+        #print("temp_list (outer): ", end=" ")
+        #print(temp_list)
+        for val in kitemsets:
+            if kitemsets[i] != val:
+                #print("two_itemset (outer): ", end=" ")
+                #print(two_itemset)
+                #print("val: ", end=" ")
+                #print(val)
+                temp_list.append(val)
+                copy_of_temp = copy.deepcopy(temp_list)
+                #print("temp_list (inner): ",end=" ")
+                #print(temp_list)
+                two_itemset.append(copy_of_temp)
+                #print("two_itemset (inner): ", end=" ")
+                #print(two_itemset)
+                temp_list.pop()
+            else:
+                continue
+    print(two_itemset)
+    # now compare this with the orignal paired one
+
+
 
     return []
 
