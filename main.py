@@ -40,7 +40,7 @@ if __name__ == "__main__":
     # parameters for the lloyd's function
     columns = [3, 4, 11]
 
-    data = [[row[c] for c in columns] for row in data]
+    data = [{row[c] for c in columns} for row in data]
 
     print("\nNew data with only the relevant columns...")
     print(data)
