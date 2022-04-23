@@ -45,6 +45,7 @@ if __name__ == "__main__":
     #df = discretizeData(df)
     #df = cleanVariants(df)
     #df = mergeTypes(df)
+
     print(df)
 
     # Create an empty list
