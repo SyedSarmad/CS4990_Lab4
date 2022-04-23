@@ -107,12 +107,12 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     print("TEST")
     print(len(frequent_itemsets))
     for item in frequent_itemsets:
-        print("whats this")
+        print("item[0] for this instance...")
         print(item[0])
         powerset_item = powerset(item[0])
-        print("IN HERE")
-        print(powerset_item)
-        print("after")
+        #print("IN HERE")
+        #print(powerset_item)
+        #print("after")
         remove_unwanted(powerset_item)
         print(powerset_item)
 
@@ -144,8 +144,8 @@ def powerset(s):
 
 def remove_unwanted(powerset):
 
-    powerset.remove([])
     for item in powerset:
-        print(item)
+        #print(item)
         if len(item) < 2:
             powerset.remove(item)
+    powerset.pop(0)
