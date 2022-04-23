@@ -87,11 +87,12 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     # Each entry (c,e,m) represents a rule c => e, with the matric value m
     # Rules should only be included if m is greater than the given threshold.    
     # e.g. [(set(condition),set(effect),0.45), ...]
-
+    metric = "all"
     print(frequent_itemsets)
 
-    print("TEST")
+    print("TESTING PHASE...")
     print(len(frequent_itemsets))
+    frequent_itemsets_with_powersets = []
     for item in frequent_itemsets:
         print("item[0] for this instance...")
         print(item[0])
@@ -99,6 +100,7 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
         setsWithCounts = list()
         for item2 in powerset_item:
             temp = set(item2)
+            #if len(temp) != 0 and temp != set(item[0]):
             if len(temp) != 0 and temp != set(item[0]):
                 count = 0
                 # print('temp is', temp)
@@ -107,12 +109,15 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
                         count += 1
                 setsWithCounts.append((temp, count))
         print(setsWithCounts)
+        frequent_itemsets_with_powersets.append(setsWithCounts)
+        print("frequent_itemsets_with_powersets...")
+        print(frequent_itemsets_with_powersets)
 
         #print("IN HERE")
         #print(powerset_item)
         #print("after")
-        remove_unwanted(powerset_item)
-        print(powerset_item)
+        #remove_unwanted(powerset_item)
+        #print(powerset_item)
 
         #for item_instance in powerset_item:
            # if len(item_instance) <= 1:
@@ -124,9 +129,37 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
         pass
     elif metric == 'all':
         # all_conf(A=>B) = MIN(P(A|B), P(B|A))
-        for antecedent in powerset_item:
-            pass
-        pass
+        count = 0
+        print("TESTING the all.....")
+        for item in frequent_itemsets:
+            # gets the powerset for the nth instance of the frequent itemset
+            frequent_itemsets_instance = frequent_itemsets_with_powersets[count]
+
+            # gets all the values that should be in the frequent itemset
+            # we will use this to get the consequence
+            set_to_get_b = item[0]
+            print("frequent_itemsets_instance...") #for testing, can delete later
+            print(frequent_itemsets_instance) #for testing, can delete later
+            print("set_to_get_b") #for testing, can delete later
+            print(set_to_get_b) #for testing, can delete later
+
+            for antecedent_set in frequent_itemsets_instance:
+                antecedent_value = antecedent_set[0]
+                consequence_set = getConsequence(antecedent_value, set_to_get_b)
+                find_count(antecedent_value, setsWithCounts)
+
+
+
+
+
+            #put the A and B into a set
+            #calc the equation
+            #put that into the set as well
+            #move on to the next instance
+            #for antecedent in frequent_itemsets_instance:
+            count = count + 1
+
+            #pass
     elif metric == 'max':
         # MAX_conf(A=>B) = MAX(P(A|B), P(B|A)
         pass
@@ -167,3 +200,16 @@ def remove_unwanted(powerset):
             #powerset.remove(item)
     powerset.pop(0)
     powerset.pop(len(powerset) - 1)
+
+
+def getConsequence(antecedent_value, set_to_get_b):
+    b = copy.deepcopy(set_to_get_b)
+    for value in b:
+        if antecedent_value == value:
+            b.remove(value)
+    return b
+
+def find_count(a,setsWithCounts):
+    for value in setsWithCounts:
+        if value[0] == a:
+            return value[1]
