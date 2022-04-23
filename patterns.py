@@ -137,16 +137,16 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
 
             # gets all the values that should be in the frequent itemset
             # we will use this to get the consequence
-            set_to_get_b = item[0]
+            count_of_all_items_for_this_instance = item[1]
             print("frequent_itemsets_instance...") #for testing, can delete later
             print(frequent_itemsets_instance) #for testing, can delete later
-            print("set_to_get_b") #for testing, can delete later
-            print(set_to_get_b) #for testing, can delete later
+            print("count of all items") #for testing, can delete later
+            print(count_of_all_items_for_this_instance) #for testing, can delete later
 
-            for antecedent_set in frequent_itemsets_instance:
-                antecedent_value = antecedent_set[0]
-                consequence_set = getConsequence(antecedent_value, set_to_get_b)
-                find_count(antecedent_value, setsWithCounts)
+            #for antecedent_set in frequent_itemsets_instance:
+                #antecedent_value = antecedent_set[0]
+                #consequence_set = getConsequence(antecedent_value, set_to_get_b)
+                #find_count(antecedent_value, setsWithCounts)
 
 
 
