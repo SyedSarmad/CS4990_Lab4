@@ -105,7 +105,20 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
         pass
 
     print("TEST")
-    print(frequent_itemsets[0])
+    print(len(frequent_itemsets))
+    for item in frequent_itemsets:
+        print("whats this")
+        print(item[0])
+        powerset_item = powerset(item[0])
+        print("IN HERE")
+        print(powerset_item)
+        print("after")
+        remove_unwanted(powerset_item)
+        print(powerset_item)
+
+        #for item_instance in powerset_item:
+           # if len(item_instance) <= 1:
+            #    powerset_item.remove(item_instance)
 
 
     return []
@@ -123,6 +136,16 @@ def remove_dup(a):
       i += 1
 
 def powerset(s):
+    list = []
     x = len(s)
     for i in range(1 << x):
-        print([s[j] for j in range(x) if (i & (1 << j))])
+        list.append([s[j] for j in range(x) if (i & (1 << j))])
+    return list
+
+def remove_unwanted(powerset):
+
+    powerset.remove([])
+    for item in powerset:
+        print(item)
+        if len(item) < 2:
+            powerset.remove(item)
