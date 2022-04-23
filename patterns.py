@@ -72,6 +72,7 @@ def removeDupes(kitemsets):
         temp.append((tuple(l[0]), l[1]))
     # print(temp)
     # print(set(temp))
+
     return set(temp)
 
 
@@ -87,6 +88,7 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     # Rules should only be included if m is greater than the given threshold.    
     # e.g. [(set(condition),set(effect),0.45), ...]
 
+    print(frequent_itemsets)
 
     print("TEST")
     print(len(frequent_itemsets))
@@ -94,6 +96,18 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
         print("item[0] for this instance...")
         print(item[0])
         powerset_item = powerset(item[0])
+        setsWithCounts = list()
+        for item2 in powerset_item:
+            temp = set(item2)
+            if len(temp) != 0 and temp != set(item[0]):
+                count = 0
+                # print('temp is', temp)
+                for sett in itemsets:
+                    if temp.issubset(sett):
+                        count += 1
+                setsWithCounts.append((temp, count))
+        print(setsWithCounts)
+
         #print("IN HERE")
         #print(powerset_item)
         #print("after")
