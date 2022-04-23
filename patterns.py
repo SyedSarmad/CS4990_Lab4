@@ -88,10 +88,12 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     # Rules should only be included if m is greater than the given threshold.    
     # e.g. [(set(condition),set(effect),0.45), ...]
     metric = "all"
+
+    print("frequent_itemsets (came from result of apriori)")
     print(frequent_itemsets)
 
-    print("TESTING PHASE...")
-    print(len(frequent_itemsets))
+    #print("TESTING PHASE...")
+    #print(len(frequent_itemsets))
     frequent_itemsets_with_powersets = []
     for item in frequent_itemsets:
         print("item[0] for this instance...")
@@ -108,10 +110,11 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
                     if temp.issubset(sett):
                         count += 1
                 setsWithCounts.append((temp, count))
+        print("printing sets with counts...")
         print(setsWithCounts)
         frequent_itemsets_with_powersets.append(setsWithCounts)
-        print("frequent_itemsets_with_powersets...")
-        print(frequent_itemsets_with_powersets)
+        #print("frequent_itemsets_with_powersets...")
+        #print(frequent_itemsets_with_powersets)
 
         #print("IN HERE")
         #print(powerset_item)
@@ -127,64 +130,46 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     if metric == "lift":
         # lift = A=>B = P(T) / (P(A) * P(B) = P(B|A) / P(B) = CONF(A=>B) / SUPP(B)
         pass
+
     elif metric == 'all':
+
+        metric_info = calculations_for_metrics(frequent_itemsets, itemsets, frequent_itemsets_with_powersets, setsWithCounts)
+        print("Result of the \"all\" metric...")
         result = []
-        # all_conf(A=>B) = MIN(P(A|B), P(B|A))
-        count = 0
-        print("TESTING the all.....")
-        for item in frequent_itemsets:
-            # gets the powerset for the nth instance of the frequent itemset
-            frequent_itemsets_instance = frequent_itemsets_with_powersets[count]
-
-            # gets all the values that should be in the frequent itemset
-            # we will use this to get the consequence
-            set_to_get_b = item[0]
-            count_of_all_items_for_this_instance = math.floor(item[1] * len(itemsets))
-            print("frequent_itemsets_instance...") #for testing, can delete later
-            print(frequent_itemsets_instance) #for testing, can delete later
-            print("count of all items") #for testing, can delete later
-            print(count_of_all_items_for_this_instance) #for testing, can delete later
-
-            for antecedent_set in frequent_itemsets_instance:
-                # a
-                #testing stuff out
-                temp_antecedent_set = copy.deepcopy(antecedent_set)
-                antecedent_value_a = temp_antecedent_set[0]
-                antecedent_value_a = antecedent_value_a.pop()
-                print(antecedent_value_a)
-                antecedent_value_a_count = antecedent_set[1]
-                # b
-                antecedent_value_b = getConsequence(antecedent_value_a, set_to_get_b)
-                print("DEBUGGING....")
-                print(setsWithCounts) #debug
-
-
-                antecedent_value_b_count = find_count(antecedent_value_b, setsWithCounts)
-                print(antecedent_value_b_count)
-                a = count_of_all_items_for_this_instance / antecedent_value_a_count
-                b = count_of_all_items_for_this_instance / antecedent_value_b_count
-
-                temp_result = (antecedent_value_a, antecedent_value_b, min(a,b))
-                result.append(temp_result)
-
-            #put the A and B into a set
-            #calc the equation
-            #put that into the set as well
-            #move on to the next instance
-            #for antecedent in frequent_itemsets_instance:
-            count = count + 1
-
+        for instance in metric_info:
+            temp_list = [instance[0], instance[1], min(instance[2], instance[3])]
+            result.append(temp_list)
         print(result)
 
-            #pass
     elif metric == 'max':
         # MAX_conf(A=>B) = MAX(P(A|B), P(B|A)
-        pass
+        metric_info = calculations_for_metrics(frequent_itemsets, itemsets, frequent_itemsets_with_powersets, setsWithCounts)
+        print("Result of the \"max\" metric...")
+        result = []
+        for instance in metric_info:
+            temp_list = [instance[0], instance[1], max(instance[2], instance[3])]
+            result.append(temp_list)
+        print(result)
+
     elif metric == 'kulczynski':
         # KULC(A=>B) = (P(A|B) + P(B|A)) / 2
-        pass
+        metric_info = calculations_for_metrics(frequent_itemsets, itemsets, frequent_itemsets_with_powersets, setsWithCounts)
+        print("Result of the \"kulczynski\" metric...")
+        result = []
+        for instance in metric_info:
+            temp_list = [instance[0], instance[1], ((instance[2] + instance[3]) / 2)]
+            result.append(temp_list)
+        print(result)
+
     elif metric == 'cosine':
         # COS(A=>B) = SQRT(P(A|B) * P(B|A))
+        metric_info = calculations_for_metrics(frequent_itemsets, itemsets, frequent_itemsets_with_powersets,setsWithCounts)
+        print("Result of the \"cosine\" metric...")
+        result = []
+        for instance in metric_info:
+            temp_list = [instance[0], instance[1], (math.sqrt((instance[2] * instance[3])))]
+            result.append(temp_list)
+        print(result)
         pass
 
 
@@ -221,18 +206,84 @@ def remove_unwanted(powerset):
 
 def getConsequence(antecedent_value, set_to_get_b):
     b = []
+    #print("in get consequence....")
+    #print(antecedent_value)
+    #print(set_to_get_b)
+    # {i,0}
+    antecedent_set_turned_to_list = copy.deepcopy(antecedent_value)
+    antecedent_set_turned_to_list = list(antecedent_set_turned_to_list)
+    list_set_to_get_b = copy.deepcopy(set_to_get_b)
+    list_set_to_get_b = list(list_set_to_get_b)
     for value in set_to_get_b:
-        if antecedent_value != value:
-            b.append(value)
+            if value not in antecedent_set_turned_to_list:
+                b.append(value)
+
+    #print(b)
     return b
 
 def find_count(a,setsWithCounts):
     for value in setsWithCounts:
-        print("value...")
-        print(value)
+        #print("value...")
+        #print(value)
         #temp = copy.deepcopy(value)
         value_as_list = value[0]
         a = set(a)
 
         if value_as_list == a:
             return value[1]
+
+
+
+def calculations_for_metrics(frequent_itemsets,itemsets,frequent_itemsets_with_powersets,setsWithCounts):
+    result = []
+    count = 0
+    # print("TESTING the all.....")
+    for item in frequent_itemsets:
+        # gets the powerset for the nth instance of the frequent itemset
+        frequent_itemsets_instance = frequent_itemsets_with_powersets[count]
+
+        # gets all the values that should be in the frequent itemset
+        # we will use this to get the consequence
+        set_to_get_b = item[0]
+        count_of_all_items_for_this_instance = math.floor(item[1] * len(itemsets))
+        # print("frequent_itemsets_instance...") #for testing, can delete later
+        # print(frequent_itemsets_instance) #for testing, can delete later
+        # print("count of all items") #for testing, can delete later
+        # print(count_of_all_items_for_this_instance) #for testing, can delete later
+
+        for antecedent_set in frequent_itemsets_instance:
+            # a
+            # testing stuff out
+            temp_antecedent_set = copy.deepcopy(antecedent_set)
+            antecedent_value_a = temp_antecedent_set[0]
+            #print(antecedent_value_a)
+            #antecedent_value_a = antecedent_value_a.pop()
+            # print(antecedent_value_a)
+            antecedent_value_a_count = antecedent_set[1]
+            # b
+            antecedent_value_b = getConsequence(antecedent_value_a, set_to_get_b)
+            # print("DEBUGGING....")
+            # print(setsWithCounts) #debug
+
+            antecedent_value_b_count = find_count(antecedent_value_b, setsWithCounts)
+            # print(antecedent_value_b_count)
+            a = count_of_all_items_for_this_instance / antecedent_value_a_count
+            b = count_of_all_items_for_this_instance / antecedent_value_b_count
+
+            temp_result = (antecedent_value_a, antecedent_value_b, a,b)
+            result.append(temp_result)
+
+        # put the A and B into a set
+        # calc the equation
+        # put that into the set as well
+        # move on to the next instance
+        # for antecedent in frequent_itemsets_instance:
+        count = count + 1
+
+        return result
+
+   # [('i', ['o', 's', 'u'], 0.5), ('o', ['i', 's', 'u'], 0.47619047619047616), ('o', ['i', 's', 'u'], 0.6666666666666666), ('s', ['i', 'o', 'u'], 0.5), ('s', ['i', 'o', 'u'], 0.6666666666666666), ('o', ['i', 's', 'u'], 0.625),
+    # ('o', ['i', 's', 'u'], 0.8333333333333334), ('u', ['i', 'o', 's'], 0.5263157894736842),
+    # ('u', ['i', 'o', 's'], 0.8333333333333334), ('o', ['i', 's', 'u'], 0.6666666666666666),
+    # ('o', ['i', 's', 'u'], 0.8333333333333334), ('s', ['i', 'o', 'u'], 0.5882352941176471),
+     #('s', ['i', 'o', 'u'], 0.8333333333333334), ('o', ['i', 's', 'u'], 0.7142857142857143)]
