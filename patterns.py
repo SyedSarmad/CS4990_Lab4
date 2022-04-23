@@ -128,6 +128,7 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
         # lift = A=>B = P(T) / (P(A) * P(B) = P(B|A) / P(B) = CONF(A=>B) / SUPP(B)
         pass
     elif metric == 'all':
+        result = []
         # all_conf(A=>B) = MIN(P(A|B), P(B|A))
         count = 0
         print("TESTING the all.....")
@@ -137,20 +138,34 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
 
             # gets all the values that should be in the frequent itemset
             # we will use this to get the consequence
-            count_of_all_items_for_this_instance = item[1]
+            set_to_get_b = item[0]
+            count_of_all_items_for_this_instance = math.floor(item[1] * len(itemsets))
             print("frequent_itemsets_instance...") #for testing, can delete later
             print(frequent_itemsets_instance) #for testing, can delete later
             print("count of all items") #for testing, can delete later
             print(count_of_all_items_for_this_instance) #for testing, can delete later
 
-            #for antecedent_set in frequent_itemsets_instance:
-                #antecedent_value = antecedent_set[0]
-                #consequence_set = getConsequence(antecedent_value, set_to_get_b)
-                #find_count(antecedent_value, setsWithCounts)
+            for antecedent_set in frequent_itemsets_instance:
+                # a
+                #testing stuff out
+                temp_antecedent_set = copy.deepcopy(antecedent_set)
+                antecedent_value_a = temp_antecedent_set[0]
+                antecedent_value_a = antecedent_value_a.pop()
+                print(antecedent_value_a)
+                antecedent_value_a_count = antecedent_set[1]
+                # b
+                antecedent_value_b = getConsequence(antecedent_value_a, set_to_get_b)
+                print("DEBUGGING....")
+                print(setsWithCounts) #debug
 
 
+                antecedent_value_b_count = find_count(antecedent_value_b, setsWithCounts)
+                print(antecedent_value_b_count)
+                a = count_of_all_items_for_this_instance / antecedent_value_a_count
+                b = count_of_all_items_for_this_instance / antecedent_value_b_count
 
-
+                temp_result = (antecedent_value_a, antecedent_value_b, min(a,b))
+                result.append(temp_result)
 
             #put the A and B into a set
             #calc the equation
@@ -158,6 +173,8 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
             #move on to the next instance
             #for antecedent in frequent_itemsets_instance:
             count = count + 1
+
+        print(result)
 
             #pass
     elif metric == 'max':
@@ -203,13 +220,19 @@ def remove_unwanted(powerset):
 
 
 def getConsequence(antecedent_value, set_to_get_b):
-    b = copy.deepcopy(set_to_get_b)
-    for value in b:
-        if antecedent_value == value:
-            b.remove(value)
+    b = []
+    for value in set_to_get_b:
+        if antecedent_value != value:
+            b.append(value)
     return b
 
 def find_count(a,setsWithCounts):
     for value in setsWithCounts:
-        if value[0] == a:
+        print("value...")
+        print(value)
+        #temp = copy.deepcopy(value)
+        value_as_list = value[0]
+        a = set(a)
+
+        if value_as_list == a:
             return value[1]
