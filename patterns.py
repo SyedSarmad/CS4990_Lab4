@@ -87,22 +87,6 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     # Rules should only be included if m is greater than the given threshold.    
     # e.g. [(set(condition),set(effect),0.45), ...]
 
-    #support is given, which is p(t)
-    if metric == "lift":
-        # lift = A=>B = P(T) / (P(A) * P(B) = P(B|A) / P(B) = CONF(A=>B) / SUPP(B)
-        pass
-    elif metric == 'all':
-        # all_conf(A=>B) = MIN(P(A|B), P(B|A)
-        pass
-    elif metric == 'max':
-        # MAX_conf(A=>B) = MAX(P(A|B), P(B|A)
-        pass
-    elif metric == 'kulczynski':
-        # KULC(A=>B) = (P(A|B) + P(B|A)) / 2
-        pass
-    elif metric == 'cosine':
-        # COS(A=>B) = SQRT(P(A|B) * P(B|A))
-        pass
 
     print("TEST")
     print(len(frequent_itemsets))
@@ -119,6 +103,25 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
         #for item_instance in powerset_item:
            # if len(item_instance) <= 1:
             #    powerset_item.remove(item_instance)
+
+    #support is given, which is p(t)
+    if metric == "lift":
+        # lift = A=>B = P(T) / (P(A) * P(B) = P(B|A) / P(B) = CONF(A=>B) / SUPP(B)
+        pass
+    elif metric == 'all':
+        # all_conf(A=>B) = MIN(P(A|B), P(B|A))
+        for antecedent in powerset_item:
+
+        pass
+    elif metric == 'max':
+        # MAX_conf(A=>B) = MAX(P(A|B), P(B|A)
+        pass
+    elif metric == 'kulczynski':
+        # KULC(A=>B) = (P(A|B) + P(B|A)) / 2
+        pass
+    elif metric == 'cosine':
+        # COS(A=>B) = SQRT(P(A|B) * P(B|A))
+        pass
 
 
     return []
@@ -144,8 +147,9 @@ def powerset(s):
 
 def remove_unwanted(powerset):
 
-    for item in powerset:
+    #for item in powerset:
         #print(item)
-        if len(item) < 2:
-            powerset.remove(item)
+        #if len(item) < 1:
+            #powerset.remove(item)
     powerset.pop(0)
+    powerset.pop(len(powerset) - 1)
