@@ -111,7 +111,7 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     elif metric == 'all':
         # all_conf(A=>B) = MIN(P(A|B), P(B|A))
         for antecedent in powerset_item:
-
+            pass
         pass
     elif metric == 'max':
         # MAX_conf(A=>B) = MAX(P(A|B), P(B|A)
