@@ -92,14 +92,15 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     print("frequent_itemsets (came from result of apriori)")
     print(frequent_itemsets)
 
+    setsWithCounts = list()
     #print("TESTING PHASE...")
     #print(len(frequent_itemsets))
     frequent_itemsets_with_powersets = []
     for item in frequent_itemsets:
         print("item[0] for this instance...")
         print(item[0])
-        powerset_item = powerset(item[0])
-        setsWithCounts = list()
+        powerset_item = powerset(item[0]).copy()
+        setsWithCounts.clear()
         for item2 in powerset_item:
             temp = set(item2)
             #if len(temp) != 0 and temp != set(item[0]):
@@ -112,9 +113,9 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
                 setsWithCounts.append((temp, count))
         print("printing sets with counts...")
         print(setsWithCounts)
-        frequent_itemsets_with_powersets.append(setsWithCounts)
-        #print("frequent_itemsets_with_powersets...")
-        #print(frequent_itemsets_with_powersets)
+        frequent_itemsets_with_powersets.append(setsWithCounts.copy())
+        print("frequent_itemsets_with_powersets...")
+        print(frequent_itemsets_with_powersets)
 
         #print("IN HERE")
         #print(powerset_item)
@@ -228,6 +229,8 @@ def find_count(a,setsWithCounts):
         #temp = copy.deepcopy(value)
         value_as_list = value[0]
         a = set(a)
+        print('a is:', a)
+        print('value_as_list is:', value_as_list)
 
         if value_as_list == a:
             return value[1]
@@ -235,12 +238,15 @@ def find_count(a,setsWithCounts):
 
 
 def calculations_for_metrics(frequent_itemsets,itemsets,frequent_itemsets_with_powersets,setsWithCounts):
+    print("\n\nIn calculations for metrics")
     result = []
     count = 0
     # print("TESTING the all.....")
     for item in frequent_itemsets:
+        print('Item is', item)
         # gets the powerset for the nth instance of the frequent itemset
         frequent_itemsets_instance = frequent_itemsets_with_powersets[count]
+        print('frequent_itemsets_instance:', frequent_itemsets_instance)
 
         # gets all the values that should be in the frequent itemset
         # we will use this to get the consequence
@@ -261,11 +267,14 @@ def calculations_for_metrics(frequent_itemsets,itemsets,frequent_itemsets_with_p
             # print(antecedent_value_a)
             antecedent_value_a_count = antecedent_set[1]
             # b
+            print('antecedent_value_a', antecedent_value_a)
             antecedent_value_b = getConsequence(antecedent_value_a, set_to_get_b)
             # print("DEBUGGING....")
             # print(setsWithCounts) #debug
 
-            antecedent_value_b_count = find_count(antecedent_value_b, setsWithCounts)
+            print('Antecedent_value_b:', antecedent_value_b)
+            print('frequent_itemsets_instance:', frequent_itemsets_instance)
+            antecedent_value_b_count = find_count(antecedent_value_b, frequent_itemsets_instance)
             # print(antecedent_value_b_count)
             a = count_of_all_items_for_this_instance / antecedent_value_a_count
             b = count_of_all_items_for_this_instance / antecedent_value_b_count
