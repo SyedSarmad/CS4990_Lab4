@@ -4,7 +4,8 @@ import math
 import numpy as np
 import pandas as pd
 
-from patterns import apriori
+from patterns import apriori, association_rules
+from testcases import show_rules
 
 DISCRETIZATION_FACTOR = 5
 
@@ -41,14 +42,17 @@ def mergeTypes(df):
 if __name__ == "__main__":
     # Getting the data from the csv file
     df = pd.read_csv("dota2.csv")
+    print(len(df))
 
     #df = discretizeData(df)
     #df = cleanVariants(df)
     #df = mergeTypes(df)
 
-    print(df)
+    # print(df)
 
     # Create an empty list
+    # df = df.loc[0:10000]
+    # print(df)
     data = []
 
     # Iterate over each row
@@ -62,8 +66,8 @@ if __name__ == "__main__":
         data.append(my_list)
 
     # Print the list
-    print("printing out the full list with each object:")
-    print(data)
+    # print("printing out the full list with each object:")
+    # print(data)
 
     # parameters for the lloyd's function
     #columns = [3, 11]
@@ -72,5 +76,13 @@ if __name__ == "__main__":
     #print("\nNew data with only the relevant columns...")
     #print(data)
 
+    print('About to run apriori')
 
-    apriori(data, 15/len(data))
+    common = apriori(data, 0.1)
+    print("Will find several association rules, most for 'max', least/none for 'all'")
+    for metric in ["all", "max", "kulczynski", "cosine"]:
+        rules = association_rules(data, common, metric, 0.71)
+        print(rules[0:50])
+        print(metric + ": ")
+        show_rules(rules)
+        print()
