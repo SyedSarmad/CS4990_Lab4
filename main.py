@@ -82,9 +82,9 @@ if __name__ == "__main__":
 
     common = apriori(data, 0.1)
     print("Will find several association rules, most for 'max', least/none for 'all'")
-    for metric in ["all", "max", "kulczynski", "cosine"]:
+    #for metric in ["all", "max", "kulczynski", "cosine"]:
     # Uncomment following line to do lift as well as all other functions
-    # for metric in ["lift", "all", "max", "kulczynski", "cosine"]:
+    for metric in ["lift", "all", "max", "kulczynski", "cosine"]:
         rules = association_rules(data, common, metric, 0.71)
         print(rules[0:50])
         print(metric + ": ")

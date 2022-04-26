@@ -122,10 +122,10 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
     if metric == "lift":
         # lift = A=>B = P(T) / (P(A) * P(B) = P(B|A) / P(B) = CONF(A=>B) / SUPP(B)
         metric_info = calculations_for_metrics(frequent_itemsets, itemsets, frequent_itemsets_with_powersets, setsWithCounts)
-        print("Result of the \"all\" metric...")
+        print("Result of the \"lift\" metric...")
         result = []
         for instance in metric_info:
-            print(instance)
+            #print(instance)
             temp_list = [instance[0], instance[1], instance[5]/instance[3]]
             if temp_list[2] < metric_threshold:
                 pass
@@ -147,8 +147,9 @@ def association_rules(itemsets, frequent_itemsets, metric, metric_threshold):
             else:
                 result.append(temp_list)
 
-            print_result(result)
+            #print_result(result)
             result.append(temp_list)
+        print_result(result)
         return result
 
     elif metric == 'max':
@@ -287,7 +288,7 @@ def calculations_for_metrics(frequent_itemsets,itemsets,frequent_itemsets_with_p
             a = count_of_all_items_for_this_instance / antecedent_value_a_count
             b = count_of_all_items_for_this_instance / antecedent_value_b_count
 
-            temp_result = (antecedent_value_a, antecedent_value_b, a,b)
+            temp_result = (antecedent_value_a, antecedent_value_b, a, b, antecedent_value_a_count, antecedent_value_b_count)
             result.append(temp_result)
 
         # put the A and B into a set
